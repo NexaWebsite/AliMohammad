@@ -1,0 +1,2556 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Personal Blog</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .theme-light {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --text-primary: #1a202c;
+            --text-secondary: #4a5568;
+            --border-color: #e2e8f0;
+        }
+        
+        .theme-dark {
+            --bg-primary: #1a202c;
+            --bg-secondary: #2d3748;
+            --text-primary: #ffffff;
+            --text-secondary: #a0aec0;
+            --border-color: #4a5568;
+        }
+        
+        .theme-purple {
+            --bg-primary: #f7fafc;
+            --bg-secondary: #edf2f7;
+            --text-primary: #2d3748;
+            --text-secondary: #4a5568;
+            --border-color: #e2e8f0;
+        }
+        
+        .blog-content {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+        
+        .blog-secondary {
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+        }
+        
+        .blog-border {
+            border-color: var(--border-color);
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .slide-in {
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(-100%); }
+            to { transform: translateX(0); }
+        }
+        
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 16px 0;
+        }
+        
+        .post-content h1, .post-content h2, .post-content h3 {
+            margin: 24px 0 16px 0;
+            font-weight: 600;
+        }
+        
+        .post-content p {
+            margin: 16px 0;
+            line-height: 1.7;
+        }
+        
+        .post-content ul, .post-content ol {
+            margin: 16px 0;
+            padding-left: 24px;
+        }
+        
+        .post-content blockquote {
+            border-left: 4px solid #667eea;
+            padding-left: 16px;
+            margin: 16px 0;
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+        
+        .reading-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            z-index: 1000;
+            transition: width 0.3s ease;
+        }
+        
+        .floating-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .floating-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .tag {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            margin: 2px;
+            transition: all 0.3s ease;
+        }
+        
+        .tag:hover {
+            background: #667eea;
+            color: white;
+        }
+        
+        .comment-form {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin-top: 32px;
+        }
+        
+        .comment {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+        
+        .sidebar-widget {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+        
+        .search-box {
+            position: relative;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 12px 16px 12px 40px;
+            border: 1px solid var(--border-color);
+            border-radius: 25px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+        
+        .search-box i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+        
+        .editor-toolbar {
+            display: flex;
+            gap: 8px;
+            padding: 12px;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--bg-secondary);
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .editor-btn {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .editor-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+        
+        .editor-content {
+            min-height: 300px;
+            padding: 16px;
+            border: 1px solid var(--border-color);
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            outline: none;
+        }
+        
+        .stats-card {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .stats-number {
+            font-size: 2rem;
+            font-weight: 700;
+            display: block;
+        }
+        
+        .social-links a {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            border-radius: 50%;
+            margin: 0 4px;
+            transition: all 0.3s ease;
+        }
+        
+        .social-links .facebook { background: #3b5998; color: white; }
+        .social-links .twitter { background: #1da1f2; color: white; }
+        .social-links .instagram { background: #e4405f; color: white; }
+        .social-links .linkedin { background: #0077b5; color: white; }
+        .social-links .github { background: #333; color: white; }
+        
+        .social-links a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 16px 24px;
+            background: #10b981;
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+            z-index: 1000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .mobile-menu {
+            display: none;
+        }
+        
+        .admin-tab {
+            transition: all 0.3s ease;
+        }
+        
+        .admin-tab.active {
+            color: #667eea;
+            border-color: #667eea;
+        }
+        
+        .admin-tab-content {
+            animation: fadeIn 0.3s ease-in;
+        }
+        
+        .data-export {
+            background: #f8fafc;
+            border: 2px dashed #cbd5e0;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .import-area {
+            border: 2px dashed #667eea;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            background: #f7fafc;
+            transition: all 0.3s ease;
+        }
+        
+        .import-area:hover {
+            border-color: #764ba2;
+            background: #edf2f7;
+        }
+        
+        .import-area.dragover {
+            border-color: #48bb78;
+            background: #f0fff4;
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-menu {
+                display: block;
+            }
+            
+            .desktop-menu {
+                display: none;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+            
+            .main-content {
+                width: 100%;
+            }
+            
+            .admin-tab {
+                font-size: 0.75rem;
+                padding: 8px 4px;
+            }
+        }
+    </style>
+</head>
+<body class="theme-light blog-content min-h-screen">
+    <!-- Reading Progress Bar -->
+    <div class="reading-progress" id="readingProgress"></div>
+    
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <span id="notificationText">Post saved successfully!</span>
+    </div>
+    
+    <!-- Header -->
+    <header class="gradient-bg text-white py-6 sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center">
+                        <i class="fas fa-blog text-purple-600 text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold">Ali Mohammad Karimi</h1>
+                        <p class="text-white/80 text-sm">Computer Science Student & Educator from Afghanistan</p>
+                    </div>
+                </div>
+                
+                <nav class="desktop-menu">
+                    <ul class="flex space-x-6">
+                        <li><a href="#" onclick="showSection('home')" class="hover:text-white/80 transition-colors">🏠 Home</a></li>
+                        <li><a href="#" onclick="showSection('about')" class="hover:text-white/80 transition-colors">👤 About</a></li>
+                        <li><a href="#" onclick="showSection('archive')" class="hover:text-white/80 transition-colors">📚 Archive</a></li>
+                        <li><a href="#" onclick="showSection('contact')" class="hover:text-white/80 transition-colors">📞 Contact</a></li>
+                        <li><a href="#" onclick="checkAdminAccess()" class="hover:text-white/80 transition-colors">⚙️ Admin</a></li>
+                    </ul>
+                </nav>
+                
+                <div class="flex items-center space-x-4">
+                    <!-- Theme Switcher -->
+                    <div class="relative">
+                        <button onclick="toggleThemeMenu()" class="p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors">
+                            <i class="fas fa-palette"></i>
+                        </button>
+                        <div id="themeMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50">
+                            <button onclick="changeTheme('light')" class="w-full text-left px-4 py-2 hover:bg-gray-100 text-gray-800">☀️ Light Theme</button>
+                            <button onclick="changeTheme('dark')" class="w-full text-left px-4 py-2 hover:bg-gray-100 text-gray-800">🌙 Dark Theme</button>
+                            <button onclick="changeTheme('purple')" class="w-full text-left px-4 py-2 hover:bg-gray-100 text-gray-800">💜 Purple Theme</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Mobile Menu Button -->
+                    <button class="mobile-menu p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors" onclick="toggleMobileMenu()">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="mobile-menu hidden mt-4 bg-white/10 rounded-lg p-4">
+                <ul class="space-y-2">
+                    <li><a href="#" onclick="showSection('home')" class="block py-2 hover:text-white/80">🏠 Home</a></li>
+                    <li><a href="#" onclick="showSection('about')" class="block py-2 hover:text-white/80">👤 About</a></li>
+                    <li><a href="#" onclick="showSection('archive')" class="block py-2 hover:text-white/80">📚 Archive</a></li>
+                    <li><a href="#" onclick="showSection('contact')" class="block py-2 hover:text-white/80">📞 Contact</a></li>
+                    <li><a href="#" onclick="checkAdminAccess()" class="block py-2 hover:text-white/80">⚙️ Admin</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <div class="container mx-auto px-4 py-8">
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Main Content -->
+            <main class="main-content flex-1">
+                <!-- Home Section -->
+                <div id="homeSection" class="section fade-in">
+                    <div class="mb-8">
+                        <h2 class="text-3xl font-bold gradient-text mb-4">Latest Posts</h2>
+                        <p class="text-gray-600">Welcome to my personal blog where I share my thoughts, experiences, and insights.</p>
+                    </div>
+                    
+                    <div id="postsContainer" class="space-y-8">
+                        <!-- Posts will be loaded here -->
+                    </div>
+                    
+                    <!-- Pagination -->
+                    <div class="flex justify-center mt-12">
+                        <div class="flex space-x-2">
+                            <button onclick="previousPage()" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors">Previous</button>
+                            <span class="px-4 py-2 bg-purple-600 text-white rounded-lg" id="currentPage">1</span>
+                            <button onclick="nextPage()" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors">Next</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- About Section -->
+                <div id="aboutSection" class="section hidden fade-in">
+                    <div class="bg-white rounded-xl shadow-lg p-8">
+                        <div class="text-center mb-8">
+                            <div class="w-32 h-32 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full mx-auto mb-4 flex items-center justify-center">
+                                <span class="text-white text-4xl font-bold">AK</span>
+                            </div>
+                            <h2 class="text-3xl font-bold gradient-text mb-2">Ali Mohammad Karimi</h2>
+                            <p class="text-gray-600">Computer Science Student & English Teacher from Afghanistan</p>
+                        </div>
+                        
+                        <div class="prose max-w-none">
+                            <div class="bg-blue-50 p-6 rounded-lg mb-6">
+                                <h3 class="text-xl font-semibold mb-4 text-blue-800">Personal Information</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                                    <div><strong>Full Name:</strong> Ali Mohammad Karimi</div>
+                                    <div><strong>Father's Name:</strong> Nasrullah</div>
+                                    <div><strong>Nationality:</strong> Afghan</div>
+                                    <div><strong>Religion:</strong> Islam</div>
+                                    <div><strong>Date of Birth:</strong> April 3, 2004</div>
+                                    <div><strong>Hometown:</strong> Daikundi, Afghanistan</div>
+                                    <div><strong>Current Location:</strong> Kabul, Afghanistan</div>
+                                    <div><strong>Contact:</strong> +(93)764002319</div>
+                                </div>
+                            </div>
+                            
+                            <p class="text-lg leading-relaxed mb-6">
+                                السلام علیکم! I'm Ali Mohammad Karimi, a passionate Computer Science student and English teacher from Afghanistan. 
+                                Currently pursuing my degree in Software Engineering at Ghurjistan University, I believe in the power of education 
+                                to transform communities and create positive change in society.
+                            </p>
+                            
+                            <div class="bg-green-50 p-6 rounded-lg mb-6">
+                                <h3 class="text-xl font-semibold mb-4 text-green-800">My Mission & Objective</h3>
+                                <p class="leading-relaxed">
+                                    My goal is to promote my community and social achievement through teaching and education. 
+                                    Using my experiences and knowledge, I want to help students and people who are involved in promoting 
+                                    society as both a teacher and learner. By teaching and promoting the community, I want to play an 
+                                    active role in advancing the culture of teaching and helping to create an intelligent and dynamic society.
+                                </p>
+                            </div>
+                            
+                            <div class="bg-purple-50 p-6 rounded-lg mb-6">
+                                <h3 class="text-xl font-semibold mb-4 text-purple-800">Education Background</h3>
+                                <div class="space-y-4">
+                                    <div class="border-l-4 border-purple-500 pl-4">
+                                        <h4 class="font-semibold">Ghurjistan University (Current)</h4>
+                                        <p class="text-sm text-gray-600">Bachelor's in Computer Science - Software Engineering Department</p>
+                                    </div>
+                                    <div class="border-l-4 border-blue-500 pl-4">
+                                        <h4 class="font-semibold">Nili Star Education Center (2021-2023)</h4>
+                                        <p class="text-sm text-gray-600">Advanced Level English Course Graduate</p>
+                                    </div>
+                                    <div class="border-l-4 border-green-500 pl-4">
+                                        <h4 class="font-semibold">Sang-e-mom High School (2022)</h4>
+                                        <p class="text-sm text-gray-600">Grade 12th Graduate</p>
+                                    </div>
+                                    <div class="border-l-4 border-orange-500 pl-4">
+                                        <h4 class="font-semibold">Online Studies</h4>
+                                        <p class="text-sm text-gray-600">Social Engineering Course</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-orange-50 p-6 rounded-lg mb-6">
+                                <h3 class="text-xl font-semibold mb-4 text-orange-800">Work Experience</h3>
+                                <div class="space-y-4">
+                                    <div class="border-l-4 border-orange-500 pl-4">
+                                        <h4 class="font-semibold">English Teacher - Nili Star Education Center</h4>
+                                        <p class="text-sm text-gray-600">January 1, 2023 - October 30, 2023</p>
+                                        <p class="text-sm">Teaching English language to students at various levels</p>
+                                    </div>
+                                    <div class="border-l-4 border-red-500 pl-4">
+                                        <h4 class="font-semibold">Volunteer Teacher - Afghan Red Crescent</h4>
+                                        <p class="text-sm text-gray-600">December 11, 2022 - December 31, 2023 (Daikundi Branch)</p>
+                                        <p class="text-sm">Volunteer educational services for community development</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                <div class="bg-indigo-50 p-6 rounded-lg">
+                                    <h3 class="text-xl font-semibold mb-4 text-indigo-800">Technical Skills</h3>
+                                    <div class="space-y-2">
+                                        <div class="flex justify-between">
+                                            <span>MS Windows</span>
+                                            <span class="text-green-600">●●●●●</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span>MS Office Suite</span>
+                                            <span class="text-green-600">●●●●●</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span>Internet & Web</span>
+                                            <span class="text-green-600">●●●●●</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span>Programming</span>
+                                            <span class="text-blue-600">●●●●○</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-teal-50 p-6 rounded-lg">
+                                    <h3 class="text-xl font-semibold mb-4 text-teal-800">Languages</h3>
+                                    <div class="space-y-3">
+                                        <div>
+                                            <div class="flex justify-between mb-1">
+                                                <span class="font-medium">Dari</span>
+                                                <span class="text-sm text-gray-600">Native</span>
+                                            </div>
+                                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                                <div class="bg-green-600 h-2 rounded-full w-full"></div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="flex justify-between mb-1">
+                                                <span class="font-medium">Pashto</span>
+                                                <span class="text-sm text-gray-600">Fluent</span>
+                                            </div>
+                                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                                <div class="bg-blue-600 h-2 rounded-full w-4/5"></div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="flex justify-between mb-1">
+                                                <span class="font-medium">English</span>
+                                                <span class="text-sm text-gray-600">Fluent</span>
+                                            </div>
+                                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                                <div class="bg-purple-600 h-2 rounded-full w-5/6"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-yellow-50 p-6 rounded-lg mb-6">
+                                <h3 class="text-xl font-semibold mb-4 text-yellow-800">Key Skills & Abilities</h3>
+                                <ul class="list-disc list-inside space-y-2 text-gray-700">
+                                    <li>Excellent communication skills with people from diverse backgrounds</li>
+                                    <li>Strong willingness to learn and continuous personal development</li>
+                                    <li>Systematic and organized work approach with attention to detail</li>
+                                    <li>Outstanding interpersonal skills and team collaboration</li>
+                                    <li>Proficient in Microsoft Office Suite and computer applications</li>
+                                    <li>Multilingual communication abilities (Dari, Pashto, English)</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-lg mb-6">
+                                <h3 class="text-xl font-semibold mb-4 text-blue-800">Professional Skills & Experience</h3>
+                                
+                                <div class="mb-6">
+                                    <h4 class="text-lg font-semibold text-purple-700 mb-3">🌐 Website & Application Designer</h4>
+                                    <ul class="list-disc list-inside space-y-2 text-gray-700 text-sm">
+                                        <li>Proficient in designing and developing modern, responsive, and interactive websites using HTML5, CSS3, JavaScript (ES6+), Bootstrap, and React</li>
+                                        <li>Strong understanding of cross-browser compatibility and mobile-first development to ensure websites are functional across all devices and platforms</li>
+                                        <li>Experienced in backend development using PHP, Node.js, and Express.js, as well as working with relational databases such as MySQL and PostgreSQL</li>
+                                        <li>Skilled in RESTful API integration for connecting applications with third-party services (such as payment gateways, email services, or social media logins)</li>
+                                        <li>Ability to design and develop progressive web applications (PWAs) and mobile applications using Flutter and React Native, providing users with seamless cross-platform experiences</li>
+                                        <li>Knowledge of cloud-based hosting platforms such as Firebase, GitHub Pages, and Netlify for deploying websites and applications</li>
+                                        <li>Experienced in using Figma and Adobe XD to create UI/UX prototypes and transform them into functional applications</li>
+                                        <li>Familiar with security practices like data encryption, secure authentication, and SQL injection prevention to protect user data</li>
+                                        <li>Completed several academic and freelance projects, including educational platforms, e-commerce websites, personal portfolios, and community-driven web applications</li>
+                                        <li>Strong focus on performance optimization, SEO (Search Engine Optimization), and scalability to ensure websites can handle growth and high traffic</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <h4 class="text-lg font-semibold text-purple-700 mb-3">⚙️ Management Systems Designer</h4>
+                                    <ul class="list-disc list-inside space-y-2 text-gray-700 text-sm">
+                                        <li>Specialized in developing custom Management Information Systems (MIS) for educational institutions, businesses, and NGOs</li>
+                                        <li>Expertise in analyzing organizational workflows, data structures, and user requirements, then translating them into automated digital systems</li>
+                                        <li>Experienced in designing Inventory Management Systems, School/University Management Systems, Human Resource Management (HRM) platforms, and Customer Relationship Management (CRM) tools</li>
+                                        <li>Skilled in database design, normalization, and optimization using MySQL, MS Access, and SQL Server, ensuring data is structured, secure, and accessible</li>
+                                        <li>Developed systems that include dashboard interfaces, role-based user access, reporting tools, and real-time notifications, empowering decision-makers with actionable insights</li>
+                                        <li>Knowledge of data visualization tools and integration with Excel or Power BI to provide meaningful reports and analysis</li>
+                                        <li>Ability to apply software engineering principles (Agile, SDLC, UML modeling, ERD diagrams) to build reliable, maintainable, and scalable systems</li>
+                                        <li>Hands-on experience with authentication systems, user management modules, and data backup/recovery mechanisms</li>
+                                        <li>Focused on designing systems that are user-friendly, time-saving, and cost-efficient, reducing manual paperwork and improving accuracy</li>
+                                        <li>Contributed to academic projects where real-world problems such as warehouse stock control, student information tracking, and staff performance evaluation were solved through digital solutions</li>
+                                        <li>Familiar with ethical hacking & social engineering principles, enabling the design of secure and threat-resilient systems</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <h3 class="text-xl font-semibold mb-4">Connect With Me</h3>
+                            <div class="social-links text-center">
+                                <a href="#" class="facebook"><i class="fab fa-facebook-f"></i></a>
+                                <a href="#" class="twitter"><i class="fab fa-twitter"></i></a>
+                                <a href="#" class="instagram"><i class="fab fa-instagram"></i></a>
+                                <a href="#" class="linkedin"><i class="fab fa-linkedin-in"></i></a>
+                                <a href="#" class="github"><i class="fab fa-github"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Archive Section -->
+                <div id="archiveSection" class="section hidden fade-in">
+                    <h2 class="text-3xl font-bold gradient-text mb-8">Blog Archive</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <div class="bg-white rounded-xl shadow-lg p-6">
+                            <h3 class="text-xl font-semibold mb-4">Categories</h3>
+                            <div id="categoriesList" class="space-y-2">
+                                <!-- Categories will be loaded here -->
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl shadow-lg p-6">
+                            <h3 class="text-xl font-semibold mb-4">Popular Tags</h3>
+                            <div id="tagsList" class="flex flex-wrap">
+                                <!-- Tags will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h3 class="text-xl font-semibold mb-4">All Posts</h3>
+                        <div id="archivePostsList" class="space-y-4">
+                            <!-- Archive posts will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Section -->
+                <div id="contactSection" class="section hidden fade-in">
+                    <h2 class="text-3xl font-bold gradient-text mb-8">Get In Touch</h2>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div class="bg-white rounded-xl shadow-lg p-8">
+                            <h3 class="text-xl font-semibold mb-6">Send Me a Message</h3>
+                            <form id="contactForm" class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Name</label>
+                                    <input type="text" id="contactName" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Email</label>
+                                    <input type="email" id="contactEmail" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Subject</label>
+                                    <input type="text" id="contactSubject" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Message</label>
+                                    <textarea id="contactMessage" rows="5" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" required></textarea>
+                                </div>
+                                <button type="submit" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-300">
+                                    Send Message
+                                </button>
+                            </form>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl shadow-lg p-8">
+                            <h3 class="text-xl font-semibold mb-6">Contact Information</h3>
+                            <div class="space-y-4">
+                                <div class="flex items-center space-x-3">
+                                    <i class="fas fa-envelope text-purple-600"></i>
+                                    <span>0764002319ali@gmail.com</span>
+                                </div>
+                                <div class="flex items-center space-x-3">
+                                    <i class="fas fa-phone text-purple-600"></i>
+                                    <span>+(93)764002319</span>
+                                </div>
+                                <div class="flex items-center space-x-3">
+                                    <i class="fas fa-map-marker-alt text-purple-600"></i>
+                                    <span>Kabul, Afghanistan</span>
+                                </div>
+                                <div class="flex items-center space-x-3">
+                                    <i class="fas fa-home text-purple-600"></i>
+                                    <span>Originally from Daikundi, Afghanistan</span>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-8">
+                                <h4 class="font-semibold mb-4">Follow Me</h4>
+                                <div class="social-links">
+                                    <a href="#" class="facebook"><i class="fab fa-facebook-f"></i></a>
+                                    <a href="#" class="twitter"><i class="fab fa-twitter"></i></a>
+                                    <a href="#" class="instagram"><i class="fab fa-instagram"></i></a>
+                                    <a href="#" class="linkedin"><i class="fab fa-linkedin-in"></i></a>
+                                    <a href="#" class="github"><i class="fab fa-github"></i></a>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-8">
+                                <h4 class="font-semibold mb-4">Newsletter</h4>
+                                <p class="text-gray-600 mb-4">Subscribe to get notified about new posts!</p>
+                                <form id="newsletterForm" class="flex">
+                                    <input type="email" id="newsletterEmail" placeholder="Your email" class="flex-1 px-4 py-2 border border-gray-300 rounded-l-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                                    <button type="submit" class="bg-purple-600 text-white px-6 py-2 rounded-r-lg hover:bg-purple-700 transition-colors">
+                                        Subscribe
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Admin Login Section -->
+                <div id="adminLoginSection" class="section hidden fade-in">
+                    <div class="max-w-md mx-auto bg-white rounded-xl shadow-lg p-8">
+                        <div class="text-center mb-8">
+                            <div class="w-16 h-16 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full mx-auto mb-4 flex items-center justify-center">
+                                <i class="fas fa-lock text-white text-2xl"></i>
+                            </div>
+                            <h2 class="text-2xl font-bold gradient-text">Admin Access</h2>
+                            <p class="text-gray-600 mt-2">Enter password to access admin panel</p>
+                        </div>
+                        
+                        <form id="adminLoginForm" class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Password</label>
+                                <input type="password" id="adminPassword" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Enter admin password" required>
+                            </div>
+                            <button type="submit" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-300">
+                                <i class="fas fa-sign-in-alt mr-2"></i>Login
+                            </button>
+                        </form>
+                        
+
+                    </div>
+                </div>
+
+                <!-- Admin Section -->
+                <div id="adminSection" class="section hidden fade-in">
+                    <div class="mb-8 flex justify-between items-center">
+                        <div>
+                            <h2 class="text-3xl font-bold gradient-text mb-4">Admin Panel</h2>
+                            <p class="text-gray-600">Complete control over your blog</p>
+                        </div>
+                        <div class="flex space-x-4">
+                            <button onclick="exportData()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                                <i class="fas fa-download mr-2"></i>Export Data
+                            </button>
+                            <button onclick="importData()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                                <i class="fas fa-upload mr-2"></i>Import Data
+                            </button>
+                            <button onclick="logoutAdmin()" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors">
+                                <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Admin Navigation Tabs -->
+                    <div class="mb-8">
+                        <div class="border-b border-gray-200">
+                            <nav class="-mb-px flex space-x-8">
+                                <button onclick="showAdminTab('dashboard')" class="admin-tab active py-2 px-1 border-b-2 border-purple-500 font-medium text-sm text-purple-600">
+                                    <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
+                                </button>
+                                <button onclick="showAdminTab('posts')" class="admin-tab py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                                    <i class="fas fa-file-alt mr-2"></i>Posts
+                                </button>
+                                <button onclick="showAdminTab('design')" class="admin-tab py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                                    <i class="fas fa-paint-brush mr-2"></i>Design
+                                </button>
+                                <button onclick="showAdminTab('settings')" class="admin-tab py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                                    <i class="fas fa-cog mr-2"></i>Settings
+                                </button>
+                                <button onclick="showAdminTab('users')" class="admin-tab py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                                    <i class="fas fa-users mr-2"></i>Users
+                                </button>
+                                <button onclick="showAdminTab('analytics')" class="admin-tab py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                                    <i class="fas fa-chart-bar mr-2"></i>Analytics
+                                </button>
+                            </nav>
+                        </div>
+                    </div>
+
+                    <!-- Dashboard Tab -->
+                    <div id="dashboardTab" class="admin-tab-content">
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                        <div class="stats-card">
+                            <span class="stats-number" id="totalPosts">0</span>
+                            <span class="text-sm">Total Posts</span>
+                        </div>
+                        <div class="stats-card">
+                            <span class="stats-number" id="totalViews">0</span>
+                            <span class="text-sm">Total Views</span>
+                        </div>
+                        <div class="stats-card">
+                            <span class="stats-number" id="totalComments">0</span>
+                            <span class="text-sm">Comments</span>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-xl font-semibold">Create New Post</h3>
+                            <button onclick="toggleEditor()" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">
+                                <i class="fas fa-plus mr-2"></i>New Post
+                            </button>
+                        </div>
+                        
+                        <div id="postEditor" class="hidden">
+                            <form id="newPostForm" class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Post Title</label>
+                                    <input type="text" id="postTitle" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" required>
+                                </div>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium mb-2">Category</label>
+                                        <select id="postCategory" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                                            <option value="Technology">Technology</option>
+                                            <option value="Travel">Travel</option>
+                                            <option value="Lifestyle">Lifestyle</option>
+                                            <option value="Work">Work</option>
+                                            <option value="Personal">Personal</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium mb-2">Tags (comma separated)</label>
+                                        <input type="text" id="postTags" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="web, design, coding">
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Featured Image URL</label>
+                                    <input type="url" id="postImage" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="https://example.com/image.jpg">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">Post Content</label>
+                                    <div class="editor-toolbar">
+                                        <button type="button" class="editor-btn" onclick="formatText('bold')"><i class="fas fa-bold"></i></button>
+                                        <button type="button" class="editor-btn" onclick="formatText('italic')"><i class="fas fa-italic"></i></button>
+                                        <button type="button" class="editor-btn" onclick="formatText('underline')"><i class="fas fa-underline"></i></button>
+                                        <button type="button" class="editor-btn" onclick="insertHeading()"><i class="fas fa-heading"></i></button>
+                                        <button type="button" class="editor-btn" onclick="insertList()"><i class="fas fa-list"></i></button>
+                                        <button type="button" class="editor-btn" onclick="insertLink()"><i class="fas fa-link"></i></button>
+                                    </div>
+                                    <div id="postContent" class="editor-content" contenteditable="true" placeholder="Write your post content here..."></div>
+                                </div>
+                                
+                                <div class="flex justify-end space-x-4">
+                                    <button type="button" onclick="saveDraft()" class="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                                        Save Draft
+                                    </button>
+                                    <button type="submit" class="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-300">
+                                        Publish Post
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    </div>
+
+                    <!-- Posts Tab -->
+                    <div id="postsTab" class="admin-tab-content hidden">
+                        <div class="bg-white rounded-xl shadow-lg p-6">
+                            <h3 class="text-xl font-semibold mb-6">Manage Posts</h3>
+                            <div id="adminPostsList" class="space-y-4">
+                                <!-- Admin posts list will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Design Tab -->
+                    <div id="designTab" class="admin-tab-content hidden">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div class="bg-white rounded-xl shadow-lg p-6">
+                                <h3 class="text-xl font-semibold mb-6">Blog Appearance</h3>
+                                <form id="designForm" class="space-y-4">
+                                    <div>
+                                        <label class="block text-sm font-medium mb-2">Blog Title</label>
+                                        <input type="text" id="blogTitle" class="w-full px-4 py-3 border border-gray-300 rounded-lg" value="My Personal Blog">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium mb-2">Blog Subtitle</label>
+                                        <input type="text" id="blogSubtitle" class="w-full px-4 py-3 border border-gray-300 rounded-lg" value="Sharing thoughts and experiences">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium mb-2">Primary Color</label>
+                                        <input type="color" id="primaryColor" class="w-full h-12 border border-gray-300 rounded-lg" value="#667eea">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium mb-2">Secondary Color</label>
+                                        <input type="color" id="secondaryColor" class="w-full h-12 border border-gray-300 rounded-lg" value="#764ba2">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium mb-2">Font Family</label>
+                                        <select id="fontFamily" class="w-full px-4 py-3 border border-gray-300 rounded-lg">
+                                            <option value="Inter">Inter</option>
+                                            <option value="Roboto">Roboto</option>
+                                            <option value="Open Sans">Open Sans</option>
+                                            <option value="Lato">Lato</option>
+                                            <option value="Poppins">Poppins</option>
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="w-full bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition-colors">
+                                        Apply Changes
+                                    </button>
+                                </form>
+                            </div>
+                            
+                            <div class="bg-white rounded-xl shadow-lg p-6">
+                                <h3 class="text-xl font-semibold mb-6">Layout Settings</h3>
+                                <form id="layoutForm" class="space-y-4">
+                                    <div>
+                                        <label class="block text-sm font-medium mb-2">Posts Per Page</label>
+                                        <input type="number" id="postsPerPageSetting" class="w-full px-4 py-3 border border-gray-300 rounded-lg" value="5" min="1" max="20">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium mb-2">Sidebar Position</label>
+                                        <select id="sidebarPosition" class="w-full px-4 py-3 border border-gray-300 rounded-lg">
+                                            <option value="right">Right</option>
+                                            <option value="left">Left</option>
+                                            <option value="none">No Sidebar</option>
+                                        </select>
+                                    </div>
+                                    <div class="flex items-center space-x-3">
+                                        <input type="checkbox" id="showReadingProgress" checked class="w-4 h-4 text-purple-600">
+                                        <label for="showReadingProgress" class="text-sm font-medium">Show Reading Progress Bar</label>
+                                    </div>
+                                    <div class="flex items-center space-x-3">
+                                        <input type="checkbox" id="enableComments" checked class="w-4 h-4 text-purple-600">
+                                        <label for="enableComments" class="text-sm font-medium">Enable Comments</label>
+                                    </div>
+                                    <button type="submit" class="w-full bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition-colors">
+                                        Save Layout
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Settings Tab -->
+                    <div id="settingsTab" class="admin-tab-content hidden">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div class="bg-white rounded-xl shadow-lg p-6">
+                                <h3 class="text-xl font-semibold mb-6">General Settings</h3>
+                                <form id="generalSettingsForm" class="space-y-4">
+                                    <div>
+                                        <label class="block text-sm font-medium mb-2">Admin Password</label>
+                                        <input type="password" id="newAdminPassword" class="w-full px-4 py-3 border border-gray-300 rounded-lg" placeholder="Enter new password">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium mb-2">Contact Email</label>
+                                        <input type="email" id="contactEmail" class="w-full px-4 py-3 border border-gray-300 rounded-lg" value="contact@myblog.com">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium mb-2">Contact Phone</label>
+                                        <input type="tel" id="contactPhone" class="w-full px-4 py-3 border border-gray-300 rounded-lg" value="+1 (555) 123-4567">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium mb-2">Location</label>
+                                        <input type="text" id="contactLocation" class="w-full px-4 py-3 border border-gray-300 rounded-lg" value="New York, NY">
+                                    </div>
+                                    <button type="submit" class="w-full bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition-colors">
+                                        Save Settings
+                                    </button>
+                                </form>
+                            </div>
+                            
+                            <div class="bg-white rounded-xl shadow-lg p-6">
+                                <h3 class="text-xl font-semibold mb-6">Social Media Links</h3>
+                                <form id="socialLinksForm" class="space-y-4">
+                                    <div>
+                                        <label class="block text-sm font-medium mb-2">Facebook URL</label>
+                                        <input type="url" id="facebookUrl" class="w-full px-4 py-3 border border-gray-300 rounded-lg" placeholder="https://facebook.com/yourpage">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium mb-2">Twitter URL</label>
+                                        <input type="url" id="twitterUrl" class="w-full px-4 py-3 border border-gray-300 rounded-lg" placeholder="https://twitter.com/yourusername">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium mb-2">Instagram URL</label>
+                                        <input type="url" id="instagramUrl" class="w-full px-4 py-3 border border-gray-300 rounded-lg" placeholder="https://instagram.com/yourusername">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium mb-2">LinkedIn URL</label>
+                                        <input type="url" id="linkedinUrl" class="w-full px-4 py-3 border border-gray-300 rounded-lg" placeholder="https://linkedin.com/in/yourprofile">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium mb-2">GitHub URL</label>
+                                        <input type="url" id="githubUrl" class="w-full px-4 py-3 border border-gray-300 rounded-lg" placeholder="https://github.com/yourusername">
+                                    </div>
+                                    <button type="submit" class="w-full bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition-colors">
+                                        Save Social Links
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Users Tab -->
+                    <div id="usersTab" class="admin-tab-content hidden">
+                        <div class="bg-white rounded-xl shadow-lg p-6">
+                            <h3 class="text-xl font-semibold mb-6">Newsletter Subscribers</h3>
+                            <div id="subscribersList" class="space-y-4">
+                                <!-- Subscribers will be loaded here -->
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl shadow-lg p-6 mt-6">
+                            <h3 class="text-xl font-semibold mb-6">Comments Management</h3>
+                            <div id="commentsManagement" class="space-y-4">
+                                <!-- Comments will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Analytics Tab -->
+                    <div id="analyticsTab" class="admin-tab-content hidden">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div class="bg-white rounded-xl shadow-lg p-6">
+                                <h3 class="text-xl font-semibold mb-6">Popular Posts</h3>
+                                <div id="popularPosts" class="space-y-4">
+                                    <!-- Popular posts will be loaded here -->
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white rounded-xl shadow-lg p-6">
+                                <h3 class="text-xl font-semibold mb-6">Recent Activity</h3>
+                                <div id="recentActivity" class="space-y-4">
+                                    <!-- Recent activity will be loaded here -->
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl shadow-lg p-6 mt-6">
+                            <h3 class="text-xl font-semibold mb-6">Traffic Overview</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                <div class="text-center p-4 bg-blue-50 rounded-lg">
+                                    <div class="text-2xl font-bold text-blue-600" id="totalPageViews">0</div>
+                                    <div class="text-sm text-gray-600">Page Views</div>
+                                </div>
+                                <div class="text-center p-4 bg-green-50 rounded-lg">
+                                    <div class="text-2xl font-bold text-green-600" id="uniqueVisitors">0</div>
+                                    <div class="text-sm text-gray-600">Unique Visitors</div>
+                                </div>
+                                <div class="text-center p-4 bg-purple-50 rounded-lg">
+                                    <div class="text-2xl font-bold text-purple-600" id="avgTimeOnSite">0</div>
+                                    <div class="text-sm text-gray-600">Avg. Time (min)</div>
+                                </div>
+                                <div class="text-center p-4 bg-orange-50 rounded-lg">
+                                    <div class="text-2xl font-bold text-orange-600" id="bounceRate">0</div>
+                                    <div class="text-sm text-gray-600">Bounce Rate (%)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Single Post View -->
+                <div id="singlePostSection" class="section hidden fade-in">
+                    <div id="singlePostContent">
+                        <!-- Single post content will be loaded here -->
+                    </div>
+                </div>
+            </main>
+
+            <!-- Sidebar -->
+            <aside class="sidebar w-full lg:w-80 space-y-6">
+                <!-- Search Widget -->
+                <div class="sidebar-widget">
+                    <h3 class="text-lg font-semibold mb-4">Search</h3>
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Search posts..." onkeyup="searchPosts()">
+                        <i class="fas fa-search"></i>
+                    </div>
+                </div>
+                
+                <!-- About Widget -->
+                <div class="sidebar-widget text-center">
+                    <div class="w-20 h-20 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full mx-auto mb-4 flex items-center justify-center">
+                        <span class="text-white text-xl font-bold">AK</span>
+                    </div>
+                    <h3 class="font-semibold mb-2">Ali Mohammad Karimi</h3>
+                    <p class="text-sm text-gray-600 mb-2">Computer Science Student</p>
+                    <p class="text-sm text-gray-600 mb-4">English Teacher from Afghanistan 🇦🇫</p>
+                    <div class="text-xs text-gray-500 mb-4">
+                        <p>📍 Kabul, Afghanistan</p>
+                        <p>🎓 Software Engineering @ Ghurjistan University</p>
+                    </div>
+                    <div class="social-links">
+                        <a href="#" class="facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="linkedin"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Recent Posts Widget -->
+                <div class="sidebar-widget">
+                    <h3 class="text-lg font-semibold mb-4">Recent Posts</h3>
+                    <div id="recentPostsWidget" class="space-y-3">
+                        <!-- Recent posts will be loaded here -->
+                    </div>
+                </div>
+                
+                <!-- Categories Widget -->
+                <div class="sidebar-widget">
+                    <h3 class="text-lg font-semibold mb-4">Categories</h3>
+                    <div id="categoriesWidget" class="space-y-2">
+                        <!-- Categories will be loaded here -->
+                    </div>
+                </div>
+                
+                <!-- Tags Widget -->
+                <div class="sidebar-widget">
+                    <h3 class="text-lg font-semibold mb-4">Popular Tags</h3>
+                    <div id="tagsWidget" class="flex flex-wrap">
+                        <!-- Tags will be loaded here -->
+                    </div>
+                </div>
+                
+                <!-- Archive Widget -->
+                <div class="sidebar-widget">
+                    <h3 class="text-lg font-semibold mb-4">Archive</h3>
+                    <div id="archiveWidget" class="space-y-2">
+                        <!-- Archive will be loaded here -->
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- Floating Back to Top Button -->
+    <button class="floating-btn" onclick="scrollToTop()" title="Back to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // Global variables
+        let posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
+        let comments = JSON.parse(localStorage.getItem('blogComments')) || [];
+        let subscribers = JSON.parse(localStorage.getItem('blogSubscribers')) || [];
+        let blogSettings = JSON.parse(localStorage.getItem('blogSettings')) || {
+            adminPassword: 'admin88888888',
+            blogTitle: 'Ali Mohammad Karimi',
+            blogSubtitle: 'Computer Science Student & Educator from Afghanistan',
+            primaryColor: '#667eea',
+            secondaryColor: '#764ba2',
+            fontFamily: 'Inter',
+            postsPerPage: 5,
+            sidebarPosition: 'right',
+            showReadingProgress: true,
+            enableComments: true,
+            contactEmail: '0764002319ali@gmail.com',
+            contactPhone: '+(93)764002319',
+            contactLocation: 'Kabul, Afghanistan',
+            socialLinks: {
+                facebook: '',
+                twitter: '',
+                instagram: '',
+                linkedin: '',
+                github: ''
+            }
+        };
+        let currentTheme = localStorage.getItem('blogTheme') || 'light';
+        let currentPage = 1;
+        let postsPerPage = blogSettings.postsPerPage;
+        let currentSection = 'home';
+        let isAdminLoggedIn = sessionStorage.getItem('adminLoggedIn') === 'true';
+        let currentAdminTab = 'dashboard';
+
+        // Sample data
+        if (posts.length === 0) {
+            posts = [
+                {
+                    id: 1,
+                    title: "السلام علیکم - Welcome to My Blog!",
+                    content: `<p>السلام علیکم و رحمة الله و برکاته! Hello and welcome to my personal blog! I'm Ali Mohammad Karimi, a Computer Science student and English teacher from Afghanistan.</p>
+                    
+                    <p>This blog represents my journey as a young Afghan pursuing education and sharing knowledge with my community. Born in Daikundi and currently living in Kabul, I believe in the transformative power of education and technology.</p>
+                    
+                    <h3>About My Mission</h3>
+                    <p>My goal is to promote my community and social achievement through teaching and education. Using my experiences and knowledge, I want to help students and people who are involved in promoting society as both a teacher and learner.</p>
+                    
+                    <h3>What You Can Expect</h3>
+                    <ul>
+                        <li>Insights about Computer Science and Software Engineering</li>
+                        <li>English language learning tips and resources</li>
+                        <li>Stories from Afghanistan and my educational journey</li>
+                        <li>Technology tutorials and programming guides</li>
+                        <li>Thoughts on education and community development</li>
+                    </ul>
+                    
+                    <p>Whether you're a fellow student, educator, or someone interested in technology and education, I hope you'll find valuable content here. Let's learn and grow together! 📚💻</p>`,
+                    category: "Personal",
+                    tags: ["welcome", "introduction", "afghanistan", "education"],
+                    image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&h=400&fit=crop",
+                    date: new Date().toISOString(),
+                    views: 156,
+                    likes: 23,
+                    published: true
+                },
+                {
+                    id: 2,
+                    title: "My Journey in Software Engineering at Ghurjistan University",
+                    content: `<p>Starting my journey in Computer Science at Ghurjistan University has been both challenging and rewarding. As a Software Engineering student, I'm constantly amazed by the possibilities that technology offers for solving real-world problems.</p>
+                    
+                    <h3>Why I Chose Software Engineering</h3>
+                    <p>Growing up in Daikundi and seeing the challenges our communities face, I realized that technology could be a powerful tool for positive change. Software engineering allows me to:</p>
+                    <ul>
+                        <li>Create solutions that can help my community</li>
+                        <li>Bridge the gap between traditional education and modern technology</li>
+                        <li>Develop applications that can make education more accessible</li>
+                        <li>Contribute to Afghanistan's technological advancement</li>
+                    </ul>
+                    
+                    <h3>Current Studies and Skills</h3>
+                    <p>At university, I'm focusing on:</p>
+                    <ul>
+                        <li>Programming fundamentals and algorithms</li>
+                        <li>Database design and management</li>
+                        <li>Web development technologies</li>
+                        <li>Software project management</li>
+                    </ul>
+                    
+                    <blockquote>Education is the most powerful weapon which you can use to change the world. - Nelson Mandela</blockquote>
+                    
+                    <p>I believe that combining my technical skills with my passion for teaching will allow me to make a meaningful impact in my community and beyond.</p>`,
+                    category: "Education",
+                    tags: ["university", "software engineering", "afghanistan", "computer science"],
+                    image: "https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?w=800&h=400&fit=crop",
+                    date: new Date(Date.now() - 86400000).toISOString(),
+                    views: 89,
+                    likes: 15,
+                    published: true
+                },
+                {
+                    id: 3,
+                    title: "Teaching English: My Experience at Nili Star Education Center",
+                    content: `<p>From January to October 2023, I had the incredible opportunity to work as an English teacher at Nili Star Education Center. This experience not only allowed me to share my knowledge but also taught me valuable lessons about education and community service.</p>
+                    
+                    <h3>The Teaching Experience</h3>
+                    <p>Teaching English to students from diverse backgrounds was both challenging and rewarding. Here's what I learned:</p>
+                    
+                    <h4>Student Diversity</h4>
+                    <p>My students came from different age groups and educational backgrounds. Some were beginners, while others had intermediate knowledge. This diversity taught me to adapt my teaching methods to meet individual needs.</p>
+                    
+                    <h4>Creative Teaching Methods</h4>
+                    <p>I developed various interactive teaching techniques:</p>
+                    <ul>
+                        <li>Role-playing exercises for practical conversation</li>
+                        <li>Group discussions on current topics</li>
+                        <li>Grammar games to make learning fun</li>
+                        <li>Storytelling sessions to improve listening skills</li>
+                    </ul>
+                    
+                    <h4>Community Impact</h4>
+                    <p>Seeing my students progress from basic English to confident speakers was incredibly fulfilling. Many of them went on to pursue higher education or better job opportunities.</p>
+                    
+                    <blockquote>The best teachers are those who show you where to look but don't tell you what to see.</blockquote>
+                    
+                    <p>This teaching experience reinforced my belief that education is the key to personal and community development. It also prepared me well for my volunteer work with the Afghan Red Crescent.</p>`,
+                    category: "Work",
+                    tags: ["teaching", "english", "education", "afghanistan", "community"],
+                    image: "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=800&h=400&fit=crop",
+                    date: new Date(Date.now() - 172800000).toISOString(),
+                    views: 234,
+                    likes: 45,
+                    published: true
+                },
+                {
+                    id: 4,
+                    title: "Volunteering with Afghan Red Crescent: A Year of Service",
+                    content: `<p>From December 2022 to December 2023, I served as a volunteer teacher with the Afghan Red Crescent in Daikundi branch. This experience was transformative and taught me the true meaning of community service.</p>
+                    
+                    <h3>Why I Chose to Volunteer</h3>
+                    <p>Growing up in Daikundi, I witnessed firsthand the educational challenges our community faces. When the opportunity arose to volunteer with the Red Crescent, I knew it was my chance to give back to my hometown.</p>
+                    
+                    <h3>My Volunteer Activities</h3>
+                    <ul>
+                        <li>Teaching basic literacy and numeracy skills</li>
+                        <li>Conducting English language classes</li>
+                        <li>Organizing educational workshops for youth</li>
+                        <li>Assisting in community awareness programs</li>
+                    </ul>
+                    
+                    <h3>Challenges and Rewards</h3>
+                    <p>Working as a volunteer teacher in a rural area came with unique challenges:</p>
+                    <ul>
+                        <li>Limited resources and teaching materials</li>
+                        <li>Varying levels of student preparedness</li>
+                        <li>Balancing volunteer work with my own studies</li>
+                    </ul>
+                    
+                    <p>However, the rewards far outweighed the challenges. Seeing students learn to read and write, watching their confidence grow, and knowing that I was contributing to my community's development made every effort worthwhile.</p>
+                    
+                    <blockquote>Service to others is the rent you pay for your room here on earth. - Muhammad Ali</blockquote>
+                    
+                    <p>This volunteer experience has shaped my perspective on education and community service, and continues to inspire my academic and professional goals.</p>`,
+                    category: "Work",
+                    tags: ["volunteer", "red crescent", "daikundi", "community service", "teaching"],
+                    image: "https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=800&h=400&fit=crop",
+                    date: new Date(Date.now() - 259200000).toISOString(),
+                    views: 178,
+                    likes: 32,
+                    published: true
+                }
+            ];
+            localStorage.setItem('blogPosts', JSON.stringify(posts));
+        }
+
+        // Initialize the blog
+        document.addEventListener('DOMContentLoaded', function() {
+            applyTheme(currentTheme);
+            applyBlogSettings();
+            loadPosts();
+            loadSidebar();
+            updateStats();
+            
+            // Reading progress
+            window.addEventListener('scroll', updateReadingProgress);
+            
+            // Auto-save drafts
+            setInterval(autoSaveDraft, 30000);
+            
+            // Admin login form
+            document.getElementById('adminLoginForm').addEventListener('submit', handleAdminLogin);
+            
+            // Admin forms
+            setupAdminForms();
+        });
+
+        // Admin authentication
+        function checkAdminAccess() {
+            if (isAdminLoggedIn) {
+                showSection('admin');
+            } else {
+                showSection('adminLogin');
+            }
+        }
+
+        function handleAdminLogin(e) {
+            e.preventDefault();
+            const password = document.getElementById('adminPassword').value;
+            
+            if (password === blogSettings.adminPassword) {
+                isAdminLoggedIn = true;
+                sessionStorage.setItem('adminLoggedIn', 'true');
+                showSection('admin');
+                showNotification('Welcome to admin panel!');
+            } else {
+                showNotification('Invalid password!');
+                document.getElementById('adminPassword').value = '';
+            }
+        }
+
+        function logoutAdmin() {
+            isAdminLoggedIn = false;
+            sessionStorage.removeItem('adminLoggedIn');
+            showSection('home');
+            showNotification('Logged out successfully!');
+        }
+
+        function showSection(section) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
+            
+            // Show selected section
+            if (section === 'adminLogin') {
+                document.getElementById('adminLoginSection').classList.remove('hidden');
+            } else {
+                document.getElementById(section + 'Section').classList.remove('hidden');
+            }
+            currentSection = section;
+            
+            // Load section-specific content
+            switch(section) {
+                case 'home':
+                    loadPosts();
+                    break;
+                case 'archive':
+                    loadArchive();
+                    break;
+                case 'admin':
+                    if (isAdminLoggedIn) {
+                        loadAdminPanel();
+                    } else {
+                        checkAdminAccess();
+                        return;
+                    }
+                    break;
+            }
+            
+            // Close mobile menu
+            document.getElementById('mobileMenu').classList.add('hidden');
+        }
+
+        // Admin tabs management
+        function showAdminTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.admin-tab-content').forEach(tab => tab.classList.add('hidden'));
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.admin-tab').forEach(tab => {
+                tab.classList.remove('active', 'text-purple-600', 'border-purple-500');
+                tab.classList.add('text-gray-500', 'border-transparent');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabName + 'Tab').classList.remove('hidden');
+            
+            // Add active class to selected tab
+            const activeTab = document.querySelector(`[onclick="showAdminTab('${tabName}')"]`);
+            activeTab.classList.add('active', 'text-purple-600', 'border-purple-500');
+            activeTab.classList.remove('text-gray-500', 'border-transparent');
+            
+            currentAdminTab = tabName;
+            
+            // Load tab-specific content
+            switch(tabName) {
+                case 'dashboard':
+                    loadDashboard();
+                    break;
+                case 'posts':
+                    loadAdminPosts();
+                    break;
+                case 'design':
+                    loadDesignSettings();
+                    break;
+                case 'settings':
+                    loadGeneralSettings();
+                    break;
+                case 'users':
+                    loadUsersManagement();
+                    break;
+                case 'analytics':
+                    loadAnalytics();
+                    break;
+            }
+        }
+
+        function setupAdminForms() {
+            // Design form
+            document.getElementById('designForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                blogSettings.blogTitle = document.getElementById('blogTitle').value;
+                blogSettings.blogSubtitle = document.getElementById('blogSubtitle').value;
+                blogSettings.primaryColor = document.getElementById('primaryColor').value;
+                blogSettings.secondaryColor = document.getElementById('secondaryColor').value;
+                blogSettings.fontFamily = document.getElementById('fontFamily').value;
+                
+                saveBlogSettings();
+                applyBlogSettings();
+                showNotification('Design updated successfully!');
+            });
+
+            // Layout form
+            document.getElementById('layoutForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                blogSettings.postsPerPage = parseInt(document.getElementById('postsPerPageSetting').value);
+                blogSettings.sidebarPosition = document.getElementById('sidebarPosition').value;
+                blogSettings.showReadingProgress = document.getElementById('showReadingProgress').checked;
+                blogSettings.enableComments = document.getElementById('enableComments').checked;
+                
+                postsPerPage = blogSettings.postsPerPage;
+                saveBlogSettings();
+                applyBlogSettings();
+                showNotification('Layout settings saved!');
+            });
+
+            // General settings form
+            document.getElementById('generalSettingsForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const newPassword = document.getElementById('newAdminPassword').value;
+                if (newPassword) {
+                    blogSettings.adminPassword = newPassword;
+                }
+                blogSettings.contactEmail = document.getElementById('contactEmail').value;
+                blogSettings.contactPhone = document.getElementById('contactPhone').value;
+                blogSettings.contactLocation = document.getElementById('contactLocation').value;
+                
+                saveBlogSettings();
+                showNotification('Settings saved successfully!');
+                document.getElementById('newAdminPassword').value = '';
+            });
+
+            // Social links form
+            document.getElementById('socialLinksForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                blogSettings.socialLinks.facebook = document.getElementById('facebookUrl').value;
+                blogSettings.socialLinks.twitter = document.getElementById('twitterUrl').value;
+                blogSettings.socialLinks.instagram = document.getElementById('instagramUrl').value;
+                blogSettings.socialLinks.linkedin = document.getElementById('linkedinUrl').value;
+                blogSettings.socialLinks.github = document.getElementById('githubUrl').value;
+                
+                saveBlogSettings();
+                updateSocialLinks();
+                showNotification('Social links updated!');
+            });
+        }
+
+        function saveBlogSettings() {
+            localStorage.setItem('blogSettings', JSON.stringify(blogSettings));
+        }
+
+        function applyBlogSettings() {
+            // Update blog title and subtitle
+            document.querySelector('header h1').textContent = blogSettings.blogTitle;
+            document.querySelector('header p').textContent = blogSettings.blogSubtitle;
+            
+            // Update colors
+            const root = document.documentElement;
+            root.style.setProperty('--primary-color', blogSettings.primaryColor);
+            root.style.setProperty('--secondary-color', blogSettings.secondaryColor);
+            
+            // Update font family
+            document.body.style.fontFamily = `'${blogSettings.fontFamily}', sans-serif`;
+            
+            // Update contact info
+            updateContactInfo();
+            
+            // Update reading progress visibility
+            const progressBar = document.getElementById('readingProgress');
+            progressBar.style.display = blogSettings.showReadingProgress ? 'block' : 'none';
+        }
+
+        function updateContactInfo() {
+            // Update contact section
+            const contactSection = document.getElementById('contactSection');
+            if (contactSection) {
+                const emailSpan = contactSection.querySelector('.fa-envelope').nextElementSibling;
+                const phoneSpan = contactSection.querySelector('.fa-phone').nextElementSibling;
+                const locationSpan = contactSection.querySelector('.fa-map-marker-alt').nextElementSibling;
+                
+                if (emailSpan) emailSpan.textContent = blogSettings.contactEmail;
+                if (phoneSpan) phoneSpan.textContent = blogSettings.contactPhone;
+                if (locationSpan) locationSpan.textContent = blogSettings.contactLocation;
+            }
+        }
+
+        function updateSocialLinks() {
+            const socialLinks = document.querySelectorAll('.social-links a');
+            socialLinks.forEach(link => {
+                const platform = link.className.split(' ').find(cls => 
+                    ['facebook', 'twitter', 'instagram', 'linkedin', 'github'].includes(cls)
+                );
+                if (platform && blogSettings.socialLinks[platform]) {
+                    link.href = blogSettings.socialLinks[platform];
+                }
+            });
+        }
+
+        // Theme management
+        function changeTheme(theme) {
+            currentTheme = theme;
+            localStorage.setItem('blogTheme', theme);
+            applyTheme(theme);
+            document.getElementById('themeMenu').classList.add('hidden');
+            showNotification('Theme changed successfully!');
+        }
+
+        function applyTheme(theme) {
+            document.body.className = `theme-${theme} blog-content min-h-screen`;
+        }
+
+        function toggleThemeMenu() {
+            const menu = document.getElementById('themeMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+
+
+        // Posts management
+        function loadPosts() {
+            const container = document.getElementById('postsContainer');
+            const publishedPosts = posts.filter(post => post.published);
+            const startIndex = (currentPage - 1) * postsPerPage;
+            const endIndex = startIndex + postsPerPage;
+            const pagePosts = publishedPosts.slice(startIndex, endIndex);
+            
+            container.innerHTML = '';
+            
+            pagePosts.forEach(post => {
+                const postElement = createPostElement(post, false);
+                container.appendChild(postElement);
+            });
+            
+            document.getElementById('currentPage').textContent = currentPage;
+        }
+
+        function createPostElement(post, isFullPost = false) {
+            const postDiv = document.createElement('div');
+            postDiv.className = 'bg-white rounded-xl shadow-lg overflow-hidden card-hover';
+            
+            const truncatedContent = isFullPost ? post.content : truncateContent(post.content, 200);
+            const readMoreButton = isFullPost ? '' : `<button onclick="viewPost(${post.id})" class="text-purple-600 hover:text-purple-800 font-medium">Read More →</button>`;
+            
+            postDiv.innerHTML = `
+                ${post.image ? `<img src="${post.image}" alt="${post.title}" class="w-full h-48 object-cover" onerror="this.style.display='none'">` : ''}
+                <div class="p-6">
+                    <div class="flex items-center space-x-4 text-sm text-gray-500 mb-3">
+                        <span><i class="fas fa-calendar mr-1"></i>${formatDate(post.date)}</span>
+                        <span><i class="fas fa-folder mr-1"></i>${post.category}</span>
+                        <span><i class="fas fa-eye mr-1"></i>${post.views} views</span>
+                        <span><i class="fas fa-heart mr-1"></i>${post.likes} likes</span>
+                    </div>
+                    
+                    <h3 class="text-xl font-bold mb-3 hover:text-purple-600 cursor-pointer" onclick="viewPost(${post.id})">${post.title}</h3>
+                    
+                    <div class="post-content mb-4">${truncatedContent}</div>
+                    
+                    <div class="flex items-center justify-between">
+                        <div class="flex flex-wrap gap-1">
+                            ${post.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                        </div>
+                        ${readMoreButton}
+                    </div>
+                    
+                    ${isFullPost ? `
+                        <div class="mt-6 pt-6 border-t border-gray-200">
+                            <div class="flex items-center justify-between mb-4">
+                                <button onclick="likePost(${post.id})" class="flex items-center space-x-2 text-gray-600 hover:text-red-500 transition-colors">
+                                    <i class="fas fa-heart"></i>
+                                    <span>${post.likes} Likes</span>
+                                </button>
+                                <div class="flex space-x-2">
+                                    <button onclick="sharePost(${post.id}, 'facebook')" class="text-blue-600 hover:text-blue-800"><i class="fab fa-facebook"></i></button>
+                                    <button onclick="sharePost(${post.id}, 'twitter')" class="text-blue-400 hover:text-blue-600"><i class="fab fa-twitter"></i></button>
+                                    <button onclick="sharePost(${post.id}, 'linkedin')" class="text-blue-700 hover:text-blue-900"><i class="fab fa-linkedin"></i></button>
+                                </div>
+                            </div>
+                            
+                            <div class="comments-section">
+                                <h4 class="text-lg font-semibold mb-4">Comments (${getPostComments(post.id).length})</h4>
+                                
+                                <form class="comment-form" onsubmit="addComment(event, ${post.id})">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                        <input type="text" placeholder="Your Name" required class="px-4 py-2 border border-gray-300 rounded-lg">
+                                        <input type="email" placeholder="Your Email" required class="px-4 py-2 border border-gray-300 rounded-lg">
+                                    </div>
+                                    <textarea placeholder="Your Comment" required class="w-full px-4 py-2 border border-gray-300 rounded-lg mb-4" rows="3"></textarea>
+                                    <button type="submit" class="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition-colors">Post Comment</button>
+                                </form>
+                                
+                                <div class="comments-list mt-6">
+                                    ${getPostComments(post.id).map(comment => `
+                                        <div class="comment">
+                                            <div class="flex items-center space-x-3 mb-2">
+                                                <div class="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                                                    ${comment.name.charAt(0).toUpperCase()}
+                                                </div>
+                                                <div>
+                                                    <span class="font-medium">${comment.name}</span>
+                                                    <span class="text-sm text-gray-500 ml-2">${formatDate(comment.date)}</span>
+                                                </div>
+                                            </div>
+                                            <p class="text-gray-700 ml-11">${comment.content}</p>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+            
+            return postDiv;
+        }
+
+        function viewPost(postId) {
+            const post = posts.find(p => p.id === postId);
+            if (!post) return;
+            
+            // Increment views
+            post.views++;
+            localStorage.setItem('blogPosts', JSON.stringify(posts));
+            
+            // Show single post section
+            document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
+            document.getElementById('singlePostSection').classList.remove('hidden');
+            
+            // Load post content
+            const container = document.getElementById('singlePostContent');
+            container.innerHTML = '';
+            const postElement = createPostElement(post, true);
+            container.appendChild(postElement);
+            
+            // Add back button
+            const backButton = document.createElement('div');
+            backButton.className = 'mb-6';
+            backButton.innerHTML = `
+                <button onclick="showSection('home')" class="flex items-center space-x-2 text-purple-600 hover:text-purple-800 transition-colors">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Back to Posts</span>
+                </button>
+            `;
+            container.insertBefore(backButton, container.firstChild);
+        }
+
+        function truncateContent(content, maxLength) {
+            const textContent = content.replace(/<[^>]*>/g, '');
+            if (textContent.length <= maxLength) return content;
+            
+            const truncated = textContent.substring(0, maxLength);
+            return truncated.substring(0, truncated.lastIndexOf(' ')) + '...';
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+        }
+
+        // Pagination
+        function nextPage() {
+            const publishedPosts = posts.filter(post => post.published);
+            const totalPages = Math.ceil(publishedPosts.length / postsPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                loadPosts();
+            }
+        }
+
+        function previousPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                loadPosts();
+            }
+        }
+
+        // Search functionality
+        function searchPosts() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            if (!searchTerm) {
+                loadPosts();
+                return;
+            }
+            
+            const filteredPosts = posts.filter(post => 
+                post.published && (
+                    post.title.toLowerCase().includes(searchTerm) ||
+                    post.content.toLowerCase().includes(searchTerm) ||
+                    post.tags.some(tag => tag.toLowerCase().includes(searchTerm))
+                )
+            );
+            
+            const container = document.getElementById('postsContainer');
+            container.innerHTML = '';
+            
+            if (filteredPosts.length === 0) {
+                container.innerHTML = '<p class="text-center text-gray-500 py-8">No posts found matching your search.</p>';
+                return;
+            }
+            
+            filteredPosts.forEach(post => {
+                const postElement = createPostElement(post, false);
+                container.appendChild(postElement);
+            });
+        }
+
+        // Sidebar management
+        function loadSidebar() {
+            loadRecentPosts();
+            loadCategories();
+            loadTags();
+            loadArchiveWidget();
+        }
+
+        function loadRecentPosts() {
+            const container = document.getElementById('recentPostsWidget');
+            const recentPosts = posts.filter(post => post.published).slice(0, 5);
+            
+            container.innerHTML = recentPosts.map(post => `
+                <div class="flex space-x-3 cursor-pointer hover:bg-gray-50 p-2 rounded-lg transition-colors" onclick="viewPost(${post.id})">
+                    ${post.image ? `<img src="${post.image}" alt="${post.title}" class="w-12 h-12 object-cover rounded" onerror="this.style.display='none'">` : '<div class="w-12 h-12 bg-purple-100 rounded flex items-center justify-center"><i class="fas fa-file-alt text-purple-600"></i></div>'}
+                    <div class="flex-1">
+                        <h4 class="text-sm font-medium line-clamp-2">${post.title}</h4>
+                        <p class="text-xs text-gray-500">${formatDate(post.date)}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function loadCategories() {
+            const categories = {};
+            posts.filter(post => post.published).forEach(post => {
+                categories[post.category] = (categories[post.category] || 0) + 1;
+            });
+            
+            const container = document.getElementById('categoriesWidget');
+            if (container) {
+                container.innerHTML = Object.entries(categories).map(([category, count]) => `
+                    <div class="flex justify-between items-center py-1 cursor-pointer hover:text-purple-600 transition-colors" onclick="filterByCategory('${category.replace(/'/g, "\\'")}')">
+                        <span>${category}</span>
+                        <span class="text-sm text-gray-500">(${count})</span>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function loadTags() {
+            const tagCounts = {};
+            posts.filter(post => post.published).forEach(post => {
+                post.tags.forEach(tag => {
+                    tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+                });
+            });
+            
+            const container = document.getElementById('tagsWidget');
+            if (container) {
+                container.innerHTML = Object.entries(tagCounts)
+                    .sort((a, b) => b[1] - a[1])
+                    .slice(0, 15)
+                    .map(([tag, count]) => `<span class="tag cursor-pointer" onclick="filterByTag('${tag.replace(/'/g, "\\'")}');">${tag}</span>`)
+                    .join('');
+            }
+        }
+
+        function loadArchiveWidget() {
+            const archive = {};
+            posts.filter(post => post.published).forEach(post => {
+                const date = new Date(post.date);
+                const monthYear = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+                const monthName = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
+                archive[monthYear] = { name: monthName, count: (archive[monthYear]?.count || 0) + 1 };
+            });
+            
+            const container = document.getElementById('archiveWidget');
+            if (container) {
+                container.innerHTML = Object.entries(archive)
+                    .sort((a, b) => b[0].localeCompare(a[0]))
+                    .map(([monthYear, data]) => `
+                        <div class="flex justify-between items-center py-1 cursor-pointer hover:text-purple-600 transition-colors" onclick="filterByMonth('${monthYear}')">
+                            <span>${data.name}</span>
+                            <span class="text-sm text-gray-500">(${data.count})</span>
+                        </div>
+                    `).join('');
+            }
+        }
+
+        // Filter functions
+        function filterByCategory(category) {
+            const filteredPosts = posts.filter(post => post.published && post.category === category);
+            displayFilteredPosts(filteredPosts, `Category: ${category}`);
+        }
+
+        function filterByTag(tag) {
+            const filteredPosts = posts.filter(post => post.published && post.tags.includes(tag));
+            displayFilteredPosts(filteredPosts, `Tag: ${tag}`);
+        }
+
+        function filterByMonth(monthYear) {
+            const [year, month] = monthYear.split('-');
+            const filteredPosts = posts.filter(post => {
+                if (!post.published) return false;
+                const postDate = new Date(post.date);
+                return postDate.getFullYear() == year && postDate.getMonth() == month - 1;
+            });
+            const monthName = new Date(year, month - 1).toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
+            displayFilteredPosts(filteredPosts, `Archive: ${monthName}`);
+        }
+
+        function displayFilteredPosts(filteredPosts, title) {
+            showSection('home');
+            const container = document.getElementById('postsContainer');
+            container.innerHTML = `<h3 class="text-xl font-semibold mb-6 text-purple-600">${title}</h3>`;
+            
+            if (filteredPosts.length === 0) {
+                container.innerHTML += '<p class="text-center text-gray-500 py-8">No posts found.</p>';
+                return;
+            }
+            
+            filteredPosts.forEach(post => {
+                const postElement = createPostElement(post, false);
+                container.appendChild(postElement);
+            });
+        }
+
+        // Archive page
+        function loadArchive() {
+            const categoriesContainer = document.getElementById('categoriesList');
+            const tagsContainer = document.getElementById('tagsList');
+            const postsContainer = document.getElementById('archivePostsList');
+            
+            if (!categoriesContainer || !tagsContainer || !postsContainer) {
+                console.error('Archive containers not found');
+                return;
+            }
+            
+            // Load categories
+            const categories = {};
+            posts.filter(post => post.published).forEach(post => {
+                categories[post.category] = (categories[post.category] || 0) + 1;
+            });
+            
+            categoriesContainer.innerHTML = Object.entries(categories).map(([category, count]) => `
+                <div class="flex justify-between items-center py-2 border-b border-gray-200 cursor-pointer hover:text-purple-600 transition-colors" onclick="filterByCategory('${category.replace(/'/g, "\\'")}')">
+                    <span>${category}</span>
+                    <span class="text-sm text-gray-500">(${count} posts)</span>
+                </div>
+            `).join('');
+            
+            // Load tags
+            const tagCounts = {};
+            posts.filter(post => post.published).forEach(post => {
+                post.tags.forEach(tag => {
+                    tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+                });
+            });
+            
+            tagsContainer.innerHTML = Object.entries(tagCounts)
+                .sort((a, b) => b[1] - a[1])
+                .map(([tag, count]) => `<span class="tag cursor-pointer" onclick="filterByTag('${tag.replace(/'/g, "\\'")}');">${tag} (${count})</span>`)
+                .join('');
+            
+            // Load all posts
+            const publishedPosts = posts.filter(post => post.published);
+            postsContainer.innerHTML = publishedPosts.map(post => `
+                <div class="flex items-center space-x-4 py-3 border-b border-gray-200 cursor-pointer hover:bg-gray-50 transition-colors" onclick="viewPost(${post.id})">
+                    ${post.image ? `<img src="${post.image}" alt="${post.title}" class="w-16 h-16 object-cover rounded" onerror="this.style.display='none'">` : '<div class="w-16 h-16 bg-purple-100 rounded flex items-center justify-center"><i class="fas fa-file-alt text-purple-600"></i></div>'}
+                    <div class="flex-1">
+                        <h4 class="font-medium hover:text-purple-600 transition-colors">${post.title}</h4>
+                        <div class="flex items-center space-x-4 text-sm text-gray-500 mt-1">
+                            <span><i class="fas fa-calendar mr-1"></i>${formatDate(post.date)}</span>
+                            <span><i class="fas fa-folder mr-1"></i>${post.category}</span>
+                            <span><i class="fas fa-eye mr-1"></i>${post.views} views</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Comments management
+        function getPostComments(postId) {
+            return comments.filter(comment => comment.postId === postId);
+        }
+
+        function addComment(event, postId) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+            
+            const comment = {
+                id: Date.now(),
+                postId: postId,
+                name: form.querySelector('input[type="text"]').value,
+                email: form.querySelector('input[type="email"]').value,
+                content: form.querySelector('textarea').value,
+                date: new Date().toISOString()
+            };
+            
+            comments.push(comment);
+            localStorage.setItem('blogComments', JSON.stringify(comments));
+            
+            form.reset();
+            viewPost(postId); // Reload the post to show new comment
+            showNotification('Comment added successfully!');
+        }
+
+        // Social sharing
+        function sharePost(postId, platform) {
+            const post = posts.find(p => p.id === postId);
+            if (!post) return;
+            
+            const url = encodeURIComponent(window.location.href);
+            const title = encodeURIComponent(post.title);
+            const text = encodeURIComponent(truncateContent(post.content, 100));
+            
+            let shareUrl = '';
+            switch(platform) {
+                case 'facebook':
+                    shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+                    break;
+                case 'twitter':
+                    shareUrl = `https://twitter.com/intent/tweet?url=${url}&text=${title}`;
+                    break;
+                case 'linkedin':
+                    shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${url}`;
+                    break;
+            }
+            
+            if (shareUrl) {
+                window.open(shareUrl, '_blank', 'width=600,height=400');
+            }
+        }
+
+        function likePost(postId) {
+            const post = posts.find(p => p.id === postId);
+            if (post) {
+                post.likes++;
+                localStorage.setItem('blogPosts', JSON.stringify(posts));
+                viewPost(postId); // Reload to show updated likes
+                showNotification('Post liked!');
+            }
+        }
+
+        // Contact form
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('contactName').value;
+            const email = document.getElementById('contactEmail').value;
+            const subject = document.getElementById('contactSubject').value;
+            const message = document.getElementById('contactMessage').value;
+            
+            // In a real application, you would send this to a server
+            console.log('Contact form submitted:', { name, email, subject, message });
+            
+            this.reset();
+            showNotification('Message sent successfully! I\'ll get back to you soon.');
+        });
+
+        // Newsletter subscription
+        document.getElementById('newsletterForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('newsletterEmail').value;
+            
+            if (!subscribers.includes(email)) {
+                subscribers.push(email);
+                localStorage.setItem('blogSubscribers', JSON.stringify(subscribers));
+                showNotification('Successfully subscribed to newsletter!');
+            } else {
+                showNotification('You are already subscribed!');
+            }
+            
+            this.reset();
+        });
+
+        // Admin panel
+        function loadAdminPanel() {
+            showAdminTab('dashboard');
+        }
+
+        function loadDashboard() {
+            updateStats();
+            loadAdminPosts();
+        }
+
+        function loadDesignSettings() {
+            document.getElementById('blogTitle').value = blogSettings.blogTitle;
+            document.getElementById('blogSubtitle').value = blogSettings.blogSubtitle;
+            document.getElementById('primaryColor').value = blogSettings.primaryColor;
+            document.getElementById('secondaryColor').value = blogSettings.secondaryColor;
+            document.getElementById('fontFamily').value = blogSettings.fontFamily;
+            document.getElementById('postsPerPageSetting').value = blogSettings.postsPerPage;
+            document.getElementById('sidebarPosition').value = blogSettings.sidebarPosition;
+            document.getElementById('showReadingProgress').checked = blogSettings.showReadingProgress;
+            document.getElementById('enableComments').checked = blogSettings.enableComments;
+        }
+
+        function loadGeneralSettings() {
+            document.getElementById('contactEmail').value = blogSettings.contactEmail;
+            document.getElementById('contactPhone').value = blogSettings.contactPhone;
+            document.getElementById('contactLocation').value = blogSettings.contactLocation;
+            document.getElementById('facebookUrl').value = blogSettings.socialLinks.facebook;
+            document.getElementById('twitterUrl').value = blogSettings.socialLinks.twitter;
+            document.getElementById('instagramUrl').value = blogSettings.socialLinks.instagram;
+            document.getElementById('linkedinUrl').value = blogSettings.socialLinks.linkedin;
+            document.getElementById('githubUrl').value = blogSettings.socialLinks.github;
+        }
+
+        function loadUsersManagement() {
+            // Load subscribers
+            const subscribersContainer = document.getElementById('subscribersList');
+            subscribersContainer.innerHTML = subscribers.length > 0 ? 
+                subscribers.map((email, index) => `
+                    <div class="flex justify-between items-center p-3 border border-gray-200 rounded-lg">
+                        <span>${email}</span>
+                        <button onclick="removeSubscriber(${index})" class="text-red-600 hover:text-red-800">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `).join('') : '<p class="text-gray-500 text-center py-4">No subscribers yet.</p>';
+
+            // Load comments management
+            const commentsContainer = document.getElementById('commentsManagement');
+            commentsContainer.innerHTML = comments.length > 0 ?
+                comments.map(comment => {
+                    const post = posts.find(p => p.id === comment.postId);
+                    return `
+                        <div class="p-4 border border-gray-200 rounded-lg">
+                            <div class="flex justify-between items-start mb-2">
+                                <div>
+                                    <strong>${comment.name}</strong>
+                                    <span class="text-sm text-gray-500 ml-2">${formatDate(comment.date)}</span>
+                                </div>
+                                <button onclick="deleteComment(${comment.id})" class="text-red-600 hover:text-red-800">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                            <p class="text-gray-700 mb-2">${comment.content}</p>
+                            <p class="text-sm text-gray-500">On post: ${post ? post.title : 'Unknown Post'}</p>
+                        </div>
+                    `;
+                }).join('') : '<p class="text-gray-500 text-center py-4">No comments yet.</p>';
+        }
+
+        function loadAnalytics() {
+            // Popular posts
+            const popularPostsContainer = document.getElementById('popularPosts');
+            const sortedPosts = [...posts].sort((a, b) => b.views - a.views).slice(0, 5);
+            popularPostsContainer.innerHTML = sortedPosts.map(post => `
+                <div class="flex justify-between items-center p-3 border border-gray-200 rounded-lg">
+                    <div>
+                        <h4 class="font-medium">${post.title}</h4>
+                        <p class="text-sm text-gray-500">${post.views} views • ${post.likes} likes</p>
+                    </div>
+                </div>
+            `).join('');
+
+            // Recent activity
+            const recentActivityContainer = document.getElementById('recentActivity');
+            const recentPosts = [...posts].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 5);
+            const recentComments = [...comments].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 3);
+            
+            let activities = [];
+            recentPosts.forEach(post => {
+                activities.push({
+                    type: 'post',
+                    content: `New post: ${post.title}`,
+                    date: post.date
+                });
+            });
+            recentComments.forEach(comment => {
+                activities.push({
+                    type: 'comment',
+                    content: `New comment by ${comment.name}`,
+                    date: comment.date
+                });
+            });
+            
+            activities.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            recentActivityContainer.innerHTML = activities.slice(0, 8).map(activity => `
+                <div class="flex items-center space-x-3 p-2">
+                    <i class="fas fa-${activity.type === 'post' ? 'file-alt' : 'comment'} text-purple-600"></i>
+                    <div class="flex-1">
+                        <p class="text-sm">${activity.content}</p>
+                        <p class="text-xs text-gray-500">${formatDate(activity.date)}</p>
+                    </div>
+                </div>
+            `).join('');
+
+            // Update analytics stats
+            const totalViews = posts.reduce((sum, post) => sum + post.views, 0);
+            document.getElementById('totalPageViews').textContent = totalViews;
+            document.getElementById('uniqueVisitors').textContent = Math.floor(totalViews * 0.7);
+            document.getElementById('avgTimeOnSite').textContent = '3.2';
+            document.getElementById('bounceRate').textContent = '45';
+        }
+
+        function removeSubscriber(index) {
+            if (confirm('Remove this subscriber?')) {
+                subscribers.splice(index, 1);
+                localStorage.setItem('blogSubscribers', JSON.stringify(subscribers));
+                loadUsersManagement();
+                showNotification('Subscriber removed!');
+            }
+        }
+
+        function deleteComment(commentId) {
+            if (confirm('Delete this comment?')) {
+                comments = comments.filter(c => c.id !== commentId);
+                localStorage.setItem('blogComments', JSON.stringify(comments));
+                loadUsersManagement();
+                showNotification('Comment deleted!');
+            }
+        }
+
+        // Data export/import
+        function exportData() {
+            const data = {
+                posts: posts,
+                comments: comments,
+                subscribers: subscribers,
+                settings: blogSettings,
+                exportDate: new Date().toISOString()
+            };
+            
+            const dataStr = JSON.stringify(data, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `blog-backup-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            
+            URL.revokeObjectURL(url);
+            showNotification('Data exported successfully!');
+        }
+
+        function importData() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        try {
+                            const data = JSON.parse(e.target.result);
+                            
+                            if (confirm('This will replace all current data. Continue?')) {
+                                posts = data.posts || [];
+                                comments = data.comments || [];
+                                subscribers = data.subscribers || [];
+                                blogSettings = {...blogSettings, ...data.settings};
+                                
+                                localStorage.setItem('blogPosts', JSON.stringify(posts));
+                                localStorage.setItem('blogComments', JSON.stringify(comments));
+                                localStorage.setItem('blogSubscribers', JSON.stringify(subscribers));
+                                localStorage.setItem('blogSettings', JSON.stringify(blogSettings));
+                                
+                                applyBlogSettings();
+                                loadAdminPanel();
+                                loadSidebar();
+                                showNotification('Data imported successfully!');
+                            }
+                        } catch (error) {
+                            showNotification('Invalid file format!');
+                        }
+                    };
+                    reader.readAsText(file);
+                }
+            };
+            input.click();
+        }
+
+        function updateStats() {
+            const totalViews = posts.reduce((sum, post) => sum + post.views, 0);
+            const totalComments = comments.length;
+            
+            document.getElementById('totalPosts').textContent = posts.length;
+            document.getElementById('totalViews').textContent = totalViews;
+            document.getElementById('totalComments').textContent = totalComments;
+        }
+
+        function toggleEditor() {
+            const editor = document.getElementById('postEditor');
+            editor.classList.toggle('hidden');
+        }
+
+        function loadAdminPosts() {
+            const container = document.getElementById('adminPostsList');
+            if (!container) {
+                console.error('Admin posts container not found');
+                return;
+            }
+            
+            if (posts.length === 0) {
+                container.innerHTML = '<p class="text-center text-gray-500 py-8">No posts yet. Create your first post!</p>';
+                return;
+            }
+            
+            container.innerHTML = posts.map(post => `
+                <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                    <div class="flex-1">
+                        <h4 class="font-medium">${post.title}</h4>
+                        <div class="flex items-center space-x-4 text-sm text-gray-500 mt-1">
+                            <span>${formatDate(post.date)}</span>
+                            <span>${post.category}</span>
+                            <span>${post.views} views</span>
+                            <span class="px-2 py-1 rounded text-xs ${post.published ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}">
+                                ${post.published ? 'Published' : 'Draft'}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button onclick="editPost(${post.id})" class="text-blue-600 hover:text-blue-800 p-2" title="Edit Post">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button onclick="deletePost(${post.id})" class="text-red-600 hover:text-red-800 p-2" title="Delete Post">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                        <button onclick="togglePublish(${post.id})" class="text-green-600 hover:text-green-800 p-2" title="${post.published ? 'Unpublish' : 'Publish'}">
+                            <i class="fas fa-${post.published ? 'eye-slash' : 'eye'}"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Post creation and editing
+        document.getElementById('newPostForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const title = document.getElementById('postTitle').value;
+            const category = document.getElementById('postCategory').value;
+            const tags = document.getElementById('postTags').value.split(',').map(tag => tag.trim()).filter(tag => tag);
+            const image = document.getElementById('postImage').value;
+            const content = document.getElementById('postContent').innerHTML;
+            
+            const post = {
+                id: Date.now(),
+                title: title,
+                content: content,
+                category: category,
+                tags: tags,
+                image: image,
+                date: new Date().toISOString(),
+                views: 0,
+                likes: 0,
+                published: true
+            };
+            
+            posts.unshift(post);
+            localStorage.setItem('blogPosts', JSON.stringify(posts));
+            
+            this.reset();
+            document.getElementById('postContent').innerHTML = '';
+            document.getElementById('postEditor').classList.add('hidden');
+            
+            loadAdminPosts();
+            loadSidebar();
+            showNotification('Post published successfully!');
+        });
+
+        function editPost(postId) {
+            const post = posts.find(p => p.id === postId);
+            if (!post) return;
+            
+            document.getElementById('postTitle').value = post.title;
+            document.getElementById('postCategory').value = post.category;
+            document.getElementById('postTags').value = post.tags.join(', ');
+            document.getElementById('postImage').value = post.image || '';
+            document.getElementById('postContent').innerHTML = post.content;
+            
+            document.getElementById('postEditor').classList.remove('hidden');
+            
+            // Update form to edit mode
+            const form = document.getElementById('newPostForm');
+            const originalSubmitHandler = form.onsubmit;
+            
+            form.onsubmit = function(e) {
+                e.preventDefault();
+                
+                post.title = document.getElementById('postTitle').value;
+                post.category = document.getElementById('postCategory').value;
+                post.tags = document.getElementById('postTags').value.split(',').map(tag => tag.trim()).filter(tag => tag);
+                post.image = document.getElementById('postImage').value;
+                post.content = document.getElementById('postContent').innerHTML;
+                
+                localStorage.setItem('blogPosts', JSON.stringify(posts));
+                
+                form.reset();
+                document.getElementById('postContent').innerHTML = '';
+                document.getElementById('postEditor').classList.add('hidden');
+                
+                // Reset form to create mode
+                form.onsubmit = originalSubmitHandler;
+                
+                loadAdminPosts();
+                loadSidebar();
+                showNotification('Post updated successfully!');
+            };
+        }
+
+        function deletePost(postId) {
+            if (confirm('Are you sure you want to delete this post?')) {
+                posts = posts.filter(p => p.id !== postId);
+                localStorage.setItem('blogPosts', JSON.stringify(posts));
+                loadAdminPosts();
+                loadSidebar();
+                showNotification('Post deleted successfully!');
+            }
+        }
+
+        function togglePublish(postId) {
+            const post = posts.find(p => p.id === postId);
+            if (post) {
+                post.published = !post.published;
+                localStorage.setItem('blogPosts', JSON.stringify(posts));
+                loadAdminPosts();
+                loadSidebar();
+                showNotification(`Post ${post.published ? 'published' : 'unpublished'} successfully!`);
+            }
+        }
+
+        // Editor functions
+        function formatText(command) {
+            document.execCommand(command, false, null);
+            document.getElementById('postContent').focus();
+        }
+
+        function insertHeading() {
+            const text = prompt('Enter heading text:');
+            if (text) {
+                document.execCommand('insertHTML', false, `<h3>${text}</h3>`);
+            }
+        }
+
+        function insertList() {
+            document.execCommand('insertUnorderedList', false, null);
+        }
+
+        function insertLink() {
+            const url = prompt('Enter URL:');
+            if (url) {
+                document.execCommand('createLink', false, url);
+            }
+        }
+
+        function saveDraft() {
+            const title = document.getElementById('postTitle').value;
+            const category = document.getElementById('postCategory').value;
+            const tags = document.getElementById('postTags').value.split(',').map(tag => tag.trim()).filter(tag => tag);
+            const image = document.getElementById('postImage').value;
+            const content = document.getElementById('postContent').innerHTML;
+            
+            if (!title && !content) {
+                showNotification('Nothing to save!');
+                return;
+            }
+            
+            const draft = {
+                id: Date.now(),
+                title: title || 'Untitled Draft',
+                content: content,
+                category: category,
+                tags: tags,
+                image: image,
+                date: new Date().toISOString(),
+                views: 0,
+                likes: 0,
+                published: false
+            };
+            
+            posts.unshift(draft);
+            localStorage.setItem('blogPosts', JSON.stringify(posts));
+            
+            loadAdminPosts();
+            showNotification('Draft saved successfully!');
+        }
+
+        function autoSaveDraft() {
+            const title = document.getElementById('postTitle').value;
+            const content = document.getElementById('postContent').innerHTML;
+            
+            if (title || content) {
+                localStorage.setItem('blogDraft', JSON.stringify({
+                    title: title,
+                    content: content,
+                    category: document.getElementById('postCategory').value,
+                    tags: document.getElementById('postTags').value,
+                    image: document.getElementById('postImage').value,
+                    timestamp: Date.now()
+                }));
+            }
+        }
+
+        // Utility functions
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            const text = document.getElementById('notificationText');
+            text.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function updateReadingProgress() {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('readingProgress').style.width = scrolled + '%';
+        }
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.relative')) {
+                document.getElementById('themeMenu').classList.add('hidden');
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'973414bf536afd94',t:'MTc1NTg4MzY0OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
